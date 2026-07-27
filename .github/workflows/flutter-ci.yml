@@ -21,12 +21,21 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: '3.27.0'
           channel: 'stable'
 
-      - name: Force Gradle 8.9 (Fixes groovy.xml.QName error)
+      - name: Fix Gradle and AGP versions
         run: |
+          # 1. Force Gradle 8.9
           sed -i 's|distributionUrl=.*|distributionUrl=https\\://services.gradle.org/distributions/gradle-8.9-all.zip|' android/gradle/wrapper/gradle-wrapper.properties
+          
+          # 2. Force AGP 8.7.0 in settings.gradle.kts (New Flutter format)
+          sed -i 's/id("com.android.application") version "[^"]*"/id("com.android.application") version "8.7.0"/' android/settings.gradle.kts
+          sed -i 's/id("com.android.library") version "[^"]*"/id("com.android.library") version "8.7.0"/' android/settings.gradle.kts
+          
+          # 3. Force AGP 8.7.0 in build.gradle.kts (Old Flutter format, just in case)
+          sed -i 's/com.android.application:[0-9.]\+/com.android.application:8.7.0/' android/build.gradle.kts 2>/dev/null || true
+          sed -i 's/com.android.library:[0-9.]\+/com.android.library:8.7.0/' android/build.gradle.kts 2>/dev/null || true
 
       - name: Get dependencies
         run: flutter pub get
