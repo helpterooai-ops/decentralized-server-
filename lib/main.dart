@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'screens/hosting_screen.dart'; // لاحظ أننا سنغير اسم الملف في الخطوة التالية
+import 'screens/hosting_screen.dart';
+import 'screens/bots_screen.dart';
+import 'screens/files_screen.dart';
+import 'screens/links_screen.dart';
 
 void main() {
   runApp(const PocketCloudApp());
@@ -15,31 +18,42 @@ class PocketCloudApp extends StatelessWidget {
       title: 'Pocket Cloud',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // استخدام خط Cairo الحديث للعربية
-        textTheme: GoogleFonts.cairoTextTheme(ThemeData.dark().textTheme),
-        scaffoldBackgroundColor: const Color(0xFF0F111A), // خلفية داكنة فاخرة
-        primaryColor: const Color(0xFF3B82F6), // أزرق عصري
-        cardTheme: CardTheme(
-          color: const Color(0xFF1A1D2D),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: const BorderSide(color: Color(0xFF2A2E40), width: 1),
-          ),
-        ),
+        brightness: Brightness.light, // وضع فاتح
+        primaryColor: const Color(0xFF2563EB), // أزرق حديث وواضح
+        scaffoldBackgroundColor: const Color(0xFFF8FAFC), // خلفية فاتحة جداً ونظيفة
+        
+        // الخط العربي الحديث
+        textTheme: GoogleFonts.tajawalTextTheme(ThemeData.light().textTheme),
+        
         appBarTheme: AppBarTheme(
-          backgroundColor: const Color(0xFF0F111A),
+          backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: true,
-          titleTextStyle: GoogleFonts.cairo(
-            fontSize: 22,
+          titleTextStyle: GoogleFonts.tajawal(
+            color: const Color(0xFF0F172A),
+            fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+          ),
+          iconTheme: const IconThemeData(color: Color(0xFF0F172A)), // أيقونة الرجوع واضحة جداً
+        ),
+        
+        cardTheme: CardTheme(
+          color: Colors.white,
+          elevation: 2,
+          shadowColor: Colors.black12,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(color: Colors.grey.shade100),
           ),
         ),
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFF3B82F6),
-          foregroundColor: Colors.white,
+        
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF2563EB),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            textStyle: GoogleFonts.tajawal(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
         ),
       ),
       home: const HomePage(),
@@ -55,34 +69,28 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pocket Cloud'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: Colors.grey),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // قسم الترحيب
+            // بطاقة الترحيب
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF3B82F6), Color(0xFF8B5CF6)],
+                  colors: [Color(0xFF2563EB), Color(0xFF3B82F6)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF3B82F6).withOpacity(0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
+                    color: const Color(0xFF2563EB).withOpacity(0.2),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
                   ),
                 ],
               ),
@@ -91,16 +99,16 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text(
                     'مرحباً بك 👋',
-                    style: GoogleFonts.cairo(
-                      fontSize: 26,
+                    style: GoogleFonts.tajawal(
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'حوّل هاتفك إلى خادم سحابي لامركزي قوي وآمن.',
-                    style: GoogleFonts.cairo(
+                    'منصتك السحابية اللامركزية لإدارة مشاريعك بسهولة واحترافية.',
+                    style: GoogleFonts.tajawal(
                       fontSize: 15,
                       color: Colors.white.withOpacity(0.9),
                       height: 1.5,
@@ -113,16 +121,16 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 32),
             
             Text(
-              'الخدمات المتاحة',
-              style: GoogleFonts.cairo(
-                fontSize: 18,
+              'الخدمات',
+              style: GoogleFonts.tajawal(
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: const Color(0xFF0F172A),
               ),
             ),
             const SizedBox(height: 16),
             
-            // شبكة الخدمات
+            // شبكة الخدمات (كل زر يفتح صفحة مستقلة)
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -132,34 +140,32 @@ class HomePage extends StatelessWidget {
               childAspectRatio: 1.1,
               children: [
                 ServiceCard(
-                  icon: Icons.code_rounded,
-                  title: 'محرر والاستضافة',
-                  subtitle: 'اكتب وارفع مواقعك',
-                  color: const Color(0xFF3B82F6),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HostingScreen()),
-                    );
-                  },
+                  icon: Icons.code_outlined,
+                  title: 'الاستضافة',
+                  subtitle: 'محرر ومواقع ويب',
+                  color: const Color(0xFF2563EB),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HostingScreen())),
                 ),
-                const ServiceCard(
-                  icon: Icons.smart_toy_rounded,
+                ServiceCard(
+                  icon: Icons.smart_toy_outlined,
                   title: 'بوتات تيليجرام',
-                  subtitle: 'تشغيل مستمر 24/7',
-                  color: Color(0xFF8B5CF6),
+                  subtitle: 'إدارة وتشغيل',
+                  color: const Color(0xFF7C3AED),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const BotsScreen())),
                 ),
-                const ServiceCard(
-                  icon: Icons.folder_open_rounded,
+                ServiceCard(
+                  icon: Icons.folder_open_outlined,
                   title: 'مدير الملفات',
-                  subtitle: 'تحكم كامل في التخزين',
-                  color: Color(0xFF10B981),
+                  subtitle: 'تخزين سحابي',
+                  color: const Color(0xFF059669),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FilesScreen())),
                 ),
-                const ServiceCard(
-                  icon: Icons.link_rounded,
+                ServiceCard(
+                  icon: Icons.link_outlined,
                   title: 'الروابط الحية',
-                  subtitle: 'مشاركة فورية وآمنة',
-                  color: Color(0xFFF59E0B),
+                  subtitle: 'مشاركة سريعة',
+                  color: const Color(0xFFD97706),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LinksScreen())),
                 ),
               ],
             ),
@@ -175,7 +181,7 @@ class ServiceCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final Color color;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
 
   const ServiceCard({
     super.key,
@@ -183,14 +189,14 @@ class ServiceCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.color,
-    this.onTap,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -201,26 +207,26 @@ class ServiceCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(16),
+                  color: color.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 32),
               ),
               const SizedBox(height: 16),
               Text(
                 title,
-                style: GoogleFonts.cairo(
+                style: GoogleFonts.tajawal(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: const Color(0xFF0F172A),
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 subtitle,
-                style: GoogleFonts.cairo(
-                  fontSize: 12,
-                  color: Colors.grey.shade400,
+                style: GoogleFonts.tajawal(
+                  fontSize: 13,
+                  color: Colors.grey.shade600,
                 ),
               ),
             ],
