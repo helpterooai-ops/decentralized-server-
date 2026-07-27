@@ -13,25 +13,9 @@ dependencies:
 
   cupertino_icons: ^1.0.6
   
-  # 1. مكتبات الخادم المحلي (Local HTTP Server)
-  shelf: ^1.4.1
-  shelf_router: ^1.1.4
-  shelf_static: ^1.1.2
-  
-  # 2. مكتبات استضافة بوتات تيليجرام
-  televerse: ^1.1.0
-  
-  # 3. مكتبات إدارة الملفات والتخزين المحلي
-  file_picker: ^8.0.0+1
-  path_provider: ^2.1.2
-  permission_handler: ^11.3.0
-  
-  # 4. مكتبات محرر الأكواد وتلوين الصيغة (Syntax Highlighting)
+  # مكتبات أساسية فقط
   flutter_highlight: ^0.7.0
   highlight: ^0.7.0
-  
-  # 5. مكتبات مساعدة للشبكة والإعدادات
-  http: ^1.2.0
   shared_preferences: ^2.2.2
 
 dev_dependencies:
